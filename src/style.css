@@ -1,28 +1,22 @@
 html, body, #app {
-  overflow: hidden;
+  overflow: auto;
   height: 100%;
-  margin: 10px;
-  padding: 10px;
-  touch-action: none;
+  margin: 0;
+  padding: 0;
+  touch-action: auto;
   font-family: 'Noto Sans JP', sans-serif !important;
 }
-
 
 :root {
   line-height: 1.5;
   font-weight: 400;
   font-family: 'Noto Sans JP', sans-serif;
-  background-color: #ffffff; /* ← ここで白に固定 */     
-  
-
-
+  background-color: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-
 
 a {
   font-weight: 500;
@@ -75,5 +69,3 @@ button:focus-visible {
   padding: 2rem;
   text-align: center;
 }
-
-
