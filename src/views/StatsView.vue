@@ -171,6 +171,7 @@ function formatTime(seconds) {
 </script>
 
 <template>
+  <div class="h-screen overflow-y-auto">
   <div class="p-4 font-sans">
     <div class="max-w-sm mx-auto bg-green-50 border border-green-500 rounded-xl p-4 text-center shadow-md">
       <h2 class="text-green-600 text-lg font-semibold mb-2">🌟 一週間の目標時間</h2>
@@ -206,6 +207,7 @@ function formatTime(seconds) {
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 

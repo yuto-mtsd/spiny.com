@@ -339,6 +339,7 @@ function resetTimer() {
 }
 </script>
 <template>
+  <div class="h-screen overflow-y-auto">
   <div class="pb-32 px-4 w-full max-w-md mx-auto text-center">
     <!-- モード切替ボタン -->
     <div class="mt-4 mb-6">
@@ -394,5 +395,6 @@ function resetTimer() {
       <div>{{ isStudyMode ? "📚 勉強時間" : "☕ 休憩時間" }}</div>
       <div class="text-2xl mt-1">{{ all_clock_time }}</div>
     </div>
+  </div>
   </div>
 </template>
