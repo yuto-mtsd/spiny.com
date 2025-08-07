@@ -338,258 +338,61 @@ function resetTimer() {
   drawProgressCircle();
 }
 </script>
-
 <template>
-  <div class="roulette-container">
-    <div class="mode-toggle">
-      <button @click="toggleMode" :class="['btn_mode', isStudyMode ? 'btn_study' : 'btn_break']">
+  <div class="pb-32 px-4 w-full max-w-md mx-auto text-center">
+    <!-- モード切替ボタン -->
+    <div class="mt-4 mb-6">
+      <button
+        @click="toggleMode"
+        class="px-6 py-2 rounded-lg text-white text-lg font-semibold transition"
+        :class="isStudyMode ? 'bg-red-500 hover:bg-red-400' : 'bg-blue-500 hover:bg-blue-400'"
+      >
         {{ isStudyMode ? "勉強モード" : "休憩モード" }}
       </button>
     </div>
 
-    <div class="roulette-wrapper">
-      <canvas ref="canvasRef"></canvas> <!-- ✅ width/height は書かない -->
-      <button @click="spinRoulette" class="btn_start btn_yellow">
+    <!-- ルーレットとスタートボタン -->
+    <div class="relative aspect-square w-full max-w-xs mx-auto">
+      <canvas ref="canvasRef" class="w-full h-full" />
+      <button
+        @click="spinRoulette"
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+               w-40 h-40 max-w-[140px] max-h-[140px] min-w-[100px] min-h-[100px]
+               rounded-full bg-green-600 text-white font-bold text-sm flex flex-col items-center justify-center shadow-lg"
+      >
         {{ timer_text }} <br /> {{ time_number_clock }}
       </button>
     </div>
 
-    <div class="arrow"></div>
+    <!-- ルーレットの矢印 -->
+    <div class="w-0 h-0 border-l-[15px] border-r-[15px] border-b-[30px] border-transparent border-b-green-600 mx-auto my-4" />
 
-    <div class="button-row">
-      <button @click="resetTimer" class="btn_reset">リセット</button>
-      <button @click="toggleMute" class="btn_mute">
+    <!-- ボタン群 -->
+    <div class="flex justify-center gap-4 mt-4">
+      <button @click="resetTimer" class="bg-green-600 text-white px-4 py-2 rounded-lg">リセット</button>
+      <button @click="toggleMute" class="bg-green-600 text-white px-4 py-2 rounded-lg">
         {{ isMuted ? "🔇" : "🔊" }}
       </button>
-      <button @click="toggleAutoSwitch" class="btn_auto">
+      <button @click="toggleAutoSwitch" class="bg-green-600 text-white px-4 py-2 rounded-lg">
         {{ autoSwitch ? "手動" : "自動" }}
       </button>
     </div>
 
-    <div v-if="showToast" class="toast">
+    <!-- トースト -->
+    <div
+      v-if="showToast"
+      class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-black text-white py-2 px-4 rounded shadow-md z-50 text-sm"
+    >
       {{ toastMessage }}
     </div>
-    <!-- ⬇️ これで置き換える -->
-    <div class="time-display" :class="isStudyMode ? 'study' : 'break'">
-        <div class="label">{{ isStudyMode ? "📘 勉強時間" : "☕ 休憩時間" }}</div>
-        <div class="time">{{ all_clock_time }}</div>
+
+    <!-- 合計時間表示 -->
+    <div
+      class="mt-8 p-4 rounded-xl shadow bg-white text-lg font-bold border"
+      :class="isStudyMode ? 'text-red-500 border-red-500 bg-red-50' : 'text-blue-500 border-blue-500 bg-blue-50'"
+    >
+      <div>{{ isStudyMode ? "📚 勉強時間" : "☕ 休憩時間" }}</div>
+      <div class="text-2xl mt-1">{{ all_clock_time }}</div>
     </div>
-
   </div>
-
 </template>
-
-<style scoped>
-.roulette-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 0px;
-  position: relative;
-  padding-top: 0px;
-  width: 100%;
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-}
-.mode-toggle {
-  margin-bottom: 10px;
-}
-.btn_mode {
-  background-color: #61a61b;
-  margin-top: 10px;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  outline: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-}
-.btn_mode:hover {
-  background-color: #61a61b;
-}
-.roulette-wrapper {
-  --circle-size: 80vw;
-  max-width: 300px;
-  width: var(--circle-size);
-  aspect-ratio: 1 / 1;
-  position: relative;
-}
-.btn_start {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40vw;
-  height: 40vw;
-  max-width: 140px;
-  max-height: 140px;
-  min-width: 100px;
-  min-height: 100px;
-  border-radius: 50%;
-  font-size: 16px;
-  text-align: center;
-  background-color: #61a61b;
-  color: white;
-  border: none;
-  z-index: 1;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.btn_reset {
-  background-color: #61a61b;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-.btn_reset:hover {
-  background-color: #61a61b;
-}
-.arrow {
-  margin-top: 0px;
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 30px solid #61a61b;
-}
-.script_up_clock_time {
-  text-align: left;
-  padding-right: 100px;
-  margin-top: 5px;
-  font-size: 20px;
-  margin-bottom: 0px;
-  font-weight: bold;
-}
-.all_clock_time {
-  font-size: 8vw; /* デバイス幅に合わせる */
-  font-weight: bold;
-  text-align: center;
-  margin-top: 0px;
-  border: 5px solid;
-  padding-bottom: 0px;
-  margin-bottom: 0px;
-
-}
-.current-mode-label {
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #61a61b;
-}
-.button-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-.btn_mute {
-  background-color: #61a61b;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-.btn_mute:hover {
-  background-color: #61a61b;
-}
-.bg-study {
-  background-color: #fff8f0;
-}
-.bg-break {
-  background-color: #f0f8ff;
-}
-canvas {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.btn_study {
-  background-color: #ff6347; /* 勉強モード：トマト色 */
-}
-.btn_study:hover {
-  background-color: #ff8267;
-}
-.btn_break {
-  background-color: #1e90ff; /* 休憩モード：青系 */
-}
-.btn_break:hover {
-  background-color: #4eaaff;
-}
-.btn_auto {
-  background-color: #61a61b;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-.btn_auto:hover {
-  background-color: #61a61b;
-}
-.toast {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #444;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
-  transition: opacity 0.3s ease;
-}
-html, body, #app {
-  height: 100%;
-  margin-top: 0px;
-  padding-top: 0px;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  touch-action: none;
-}
-.time-display {
-  margin-top: 20px;
-  padding: 12px 24px;
-  border-radius: 14px;
-  text-align: center;
-  font-weight: bold;
-  display: inline-block;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Noto Sans JP', sans-serif;
-}
-
-.time-display.study {
-  background-color: #fff0eb;
-  color: #ff6347;
-  border: 2px solid #ff6347;
-}
-
-.time-display.break {
-  background-color: #ebf4ff;
-  color: #1e90ff;
-  border: 2px solid #1e90ff;
-}
-
-.time-display .label {
-  font-size: 1rem;
-  margin-bottom: 5px;
-}
-
-.time-display .time {
-  font-size: 2rem;
-}
-
-</style>
-
-  

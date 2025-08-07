@@ -2,8 +2,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-// main.ts
-import './style.css'; // ✅ これがあればOK
-
+import './assets/tailwind.css'
+import './style.css'; 
 
 createApp(App).use(router).mount("#app");

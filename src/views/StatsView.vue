@@ -171,126 +171,42 @@ function formatTime(seconds) {
 </script>
 
 <template>
-  <div class="stats-container">
-    <div class="goal-card">
-      <h2 class="goal-title">🌟 一週間の目標時間</h2>
-      <div class="goal-form">
-        <input v-model.number="inputGoalHours" type="number" min="0" />
-        <button @click="saveGoal">保存</button>
+  <div class="p-4 font-sans">
+    <div class="max-w-sm mx-auto bg-green-50 border border-green-500 rounded-xl p-4 text-center shadow-md">
+      <h2 class="text-green-600 text-lg font-semibold mb-2">🌟 一週間の目標時間</h2>
+      <div class="flex justify-center gap-2 mb-2">
+        <input
+          v-model.number="inputGoalHours"
+          type="number"
+          min="0"
+          class="w-20 px-2 py-1 text-sm border border-green-500 rounded-md text-right focus:outline-none focus:border-green-700"
+        />
+        <button
+          @click="saveGoal"
+          class="bg-green-600 text-white font-bold text-sm px-3 py-1 rounded-md hover:bg-green-700"
+        >保存</button>
       </div>
-      <p v-if="goalSaved" class="goal-saved">✅ 保存しました！</p>
+      <p v-if="goalSaved" class="text-green-700 text-sm">✅ 保存しました！</p>
     </div>
 
-    <h2>📊 統計</h2>
+    <h2 class="text-xl text-center text-gray-700 mt-8 mb-4">📊 統計</h2>
 
-    <div v-if="!user">ログインしてください</div>
+    <div v-if="!user" class="text-center">ログインしてください</div>
     <div v-else>
-      <div v-if="loading">読み込み中...</div>
-      <div v-else>
-        <div class="history-list">
-          <div class="history-item">
-            <h3>{{ getTodayLabel() }}</h3>
-            <p>📘 勉強時間: {{ formatTime(getStudyTimeForToday()) }}</p>
-          </div>
+      <div v-if="loading" class="text-center">読み込み中...</div>
+      <div v-else class="flex flex-col gap-4 mt-6 pb-32">
+        <div class="border border-gray-300 p-4 rounded-lg bg-gray-50 text-sm">
+          <h3 class="font-semibold text-gray-700">{{ getTodayLabel() }}</h3>
+          <p>📘 勉強時間: {{ formatTime(getStudyTimeForToday()) }}</p>
+        </div>
 
-          <h3>📈 今週の折れ線グラフ</h3>
-          <div class="chart-wrapper">
-            <Line :data="chartData" :options="chartOptions" />
-          </div>
+        <h3 class="font-semibold text-gray-700 text-base">📈 今週の折れ線グラフ</h3>
+        <div class="w-full h-52">
+          <Line :data="chartData" :options="chartOptions" />
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.stats-container {
-  padding: 0.8rem;
-  font-family: 'Noto Sans JP', sans-serif;
-}
-.goal-card {
-  max-width: 340px;
-  margin: 1rem auto;
-  background-color: #f4fff0;
-  border: 1.5px solid #61a61b;
-  border-radius: 12px;
-  padding: 1.2rem;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-.goal-title {
-  font-size: 1rem;
-  color: #61a61b;
-  margin-bottom: 0.3rem;
-}
-.goal-form {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 0.5rem;
-}
-.goal-form input {
-  width: 80px;
-  padding: 6px;
-  font-size: 14px;
-  border: 1.5px solid #61a61b;
-  border-radius: 6px;
-  text-align: right;
-  transition: border-color 0.3s ease;
-}
-.goal-form input:focus {
-  border-color: #4e8f15;
-  outline: none;
-}
-.goal-form button {
-  background-color: #61a61b;
-  color: white;
-  font-weight: bold;
-  font-size: 13px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.goal-form button:hover {
-  background-color: #4e8f15;
-}
-.goal-saved {
-  color: #4e8f15;
-  font-size: 0.8rem;
-  margin-top: 4px;
-}
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-.history-item {
-  border: 1px solid #ccc;
-  padding: 0.8rem;
-  border-radius: 10px;
-  background-color: #fafafa;
-  font-size: 14px;
-}
-.chart-wrapper {
-  width: 100%;
-  max-width: 100%;
-  height: 200px;
-}
-h3 {
-  margin-top: 20px;
-  margin-bottom: 6px;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #333;
-}
-.stats-container h2 {
-  font-size: 1.2rem;
-  color: #444;
-  text-align: center;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-</style>
+

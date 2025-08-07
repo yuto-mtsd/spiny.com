@@ -1,132 +1,98 @@
-<!-- src/views/LoginView.vue -->
 <template>
-    <div class="login-container">
-      <h2>ログイン</h2>
-  
-      <!-- メール & パスワードログイン -->
-      <form @submit.prevent="loginWithEmail">
-        <input v-model="email" type="email" placeholder="メールアドレス" required />
-        <input v-model="password" type="password" placeholder="パスワード" required />
-        <button class="btn-main" type="submit">ログイン</button>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div class="w-full max-w-sm p-6 bg-white rounded-xl shadow-md space-y-6 text-center">
+      <h2 class="text-2xl font-bold text-gray-800">ログイン</h2>
+
+      <form @submit.prevent="loginWithEmail" class="space-y-4">
+        <input
+          v-model="email"
+          type="email"
+          placeholder="メールアドレス"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="パスワード"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
+        <button
+          type="submit"
+          class="w-full py-2 font-bold text-white bg-green-600 hover:bg-green-700 rounded-md"
+        >
+          ログイン
+        </button>
       </form>
-  
-      <button class="btn-sub" @click="signUp">アカウント作成</button>
-  
-      <hr />
-  
-      <!-- Googleログイン -->
-      <button class="btn-sub" @click="loginWithGoogle">Googleでログイン</button>
-  
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
+      <button
+        @click="signUp"
+        class="w-full py-2 font-bold text-green-600 bg-white border-2 border-green-600 rounded-md hover:bg-gray-100"
+      >
+        アカウント作成
+      </button>
+
+      <hr class="border-t" />
+
+      <button
+        @click="loginWithGoogle"
+        class="w-full py-2 font-bold text-green-600 bg-white border-2 border-green-600 rounded-md hover:bg-gray-100"
+      >
+        Googleでログイン
+      </button>
+
+      <p v-if="errorMessage" class="text-red-600 text-sm mt-2">{{ errorMessage }}</p>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from "vue";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    GoogleAuthProvider,
-    signInWithPopup,
-  } from "firebase/auth";
-  import { useRouter } from "vue-router";
-  import { auth } from "@/firebase";
-  
-  const email = ref("");
-  const password = ref("");
-  const errorMessage = ref("");
-  const router = useRouter();
-  
-  const loginWithEmail = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email.value, password.value);
-      router.push("/");
-    } catch (error) {
-      errorMessage.value = "ログインに失敗しました";
-      console.error(error);
-    }
-  };
-  
-  const signUp = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email.value, password.value);
-      router.push("/");
-    } catch (error) {
-      errorMessage.value = "アカウント作成に失敗しました";
-      console.error(error);
-    }
-  };
-  
-  const loginWithGoogle = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      router.push("/");
-    } catch (error) {
-      errorMessage.value = "Googleログインに失敗しました";
-      console.error(error);
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .login-container {
-    max-width: 400px;
-    margin: auto;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { useRouter } from "vue-router";
+import { auth } from "@/firebase";
+
+const email = ref("");
+const password = ref("");
+const errorMessage = ref("");
+const router = useRouter();
+
+const loginWithEmail = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, email.value, password.value);
+    router.push("/");
+  } catch (error) {
+    errorMessage.value = "ログインに失敗しました";
+    console.error(error);
   }
-  input {
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
+};
+
+const signUp = async () => {
+  try {
+    await createUserWithEmailAndPassword(auth, email.value, password.value);
+    router.push("/");
+  } catch (error) {
+    errorMessage.value = "アカウント作成に失敗しました";
+    console.error(error);
   }
-  button {
-    padding: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 8px;
-    width: 100%;
-    cursor: pointer;
+};
+
+const loginWithGoogle = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    router.push("/");
+  } catch (error) {
+    errorMessage.value = "Googleログインに失敗しました";
+    console.error(error);
   }
-  
-  /* ✅ 緑背景のログインボタン */
-  .btn-main {
-    margin-top: 10px;
-    background-color: #61a61b;
-    color: white;
-    border: none;
-  }
-  .btn-main:hover {
-    background-color: #4e8f15;
-  }
-  
-  /* ✅ 白背景＋緑枠のサブボタン */
-  .btn-sub {
-    background-color: white;
-    color: #61a61b;
-    border: 2px solid #61a61b;
-  }
-  .btn-sub:hover {
-    background-color: #f4f4f4;
-  }
-  
-  hr {
-    margin: 16px 0;
-    border: none;
-    border-top: 1px solid #ccc;
-  }
-  
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
-  </style>
-  
+};
+</script>
+
